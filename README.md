@@ -23,4 +23,6 @@ The connection works like this:
 
 Learn more about each project from their individual readmes:
 
-**WIP**
+- **[web-frontend](projects/web-frontend/README.md)** - User interface for operators
+- **[web-backend](projects/web-backend/README.md)** - Central server coordinating data flow and business logic
+- **[mission-planner](projects/mission-planner/README.md)** - Low-level drone communication and flight operations
