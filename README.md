@@ -12,7 +12,7 @@ It contains 3 main sub-projects:
 3. **mission-planner** handles low-level drone communication and flight operations
 4. **integration-testing** provides integration testing for the connection between `mission-planner` and `web-backend`
 
-Data flows from the drone through MissionPlanner-Scripts → GCOM-2025 → GCOM-Front-End, with real-time updates pushed via WebSockets for live telemetry and status information.
+Data flows from the drone through mission-planner → web-backend → web-frontend, with real-time updates pushed via WebSockets for live telemetry and status information.
 
 The connection works like this:
 

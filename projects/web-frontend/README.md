@@ -11,16 +11,12 @@ _Project Link: https://github.com/orgs/ubcuas/projects/6/views/5_
 ## Development Setup
 Node.js v20 is required for development, download at https://nodejs.org/en/download/current or use `nvm` if you're cool and swag with it.
 ### Steps:
-1. `git clone` this reponsitory
+1. Navigate to project directory and run `npm i` to install required libraries.
 ```
-git clone https://github.com/ubcuas/GCOM-Front-End.git
-```
-2. Navigate to project directory and run `npm i` to install required libraries.
-```
-cd GCOM-Front-End
+cd projects/web-frontend
 npm i
 ```
-3. `npm run dev` to start the app in development mode.
+2. `npm run dev` to start the app in development mode.
 ```
 npm run dev
 ```

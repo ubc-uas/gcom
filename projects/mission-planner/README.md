@@ -62,7 +62,7 @@ mavproxy --master=tcp:127.0.0.1:5760 --out=udp:127.0.0.1:14550 --out=udp:127.0.0
 
 When running mavproxy, point master to the SITL instance connection and specify 2 outputs, one for connecting with Mission Planner for visualization and one to interface with pymavlink.
 
-### Using MissionPlanner-Scripts
+### Using mission-planner
 
 1. Install required dependencies:
 
@@ -124,7 +124,7 @@ following:
 
 7. If you have completed all of the above steps you should be ready to use SITL with MissionPlanner. If you see a drone show up on the map then you should be ready to go.
 
-### Using MissionPlanner-Scripts
+### Using mission-planner
 
 > [!NOTE]
 > MissionPlanner currently only works on Windows

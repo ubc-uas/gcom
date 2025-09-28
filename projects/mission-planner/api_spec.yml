@@ -1,8 +1,8 @@
 openapi: 3.0.2
 info:
-  title: MissionPlanner Scripts
+  title: mission-planner
   version: 2.0.0
-  description: "This is the API that the MissionPlanner Scripts server exposes to GCOM."
+  description: "This is the API that the mission-planner server exposes to web-backend."
   contact:
     name: Amin Fahiminia, Hansen Dan
 servers:
