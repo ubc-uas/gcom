@@ -1,0 +1,47 @@
+name: Django CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    name: Run Django Tests
+    runs-on: ubuntu-latest
+
+    env:
+      DJANGO_SETTINGS_MODULE: gcom.settings
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Poetry
+        uses: abatilo/actions-poetry@v2
+        with:
+          poetry-version: "1.8.2"
+
+      - name: Install the project dependencies
+        working-directory: ./
+        run: |
+          poetry config virtualenvs.create true --local
+          poetry lock --no-update
+          poetry install
+
+      - name: Verify Django Installation
+        working-directory: ./src
+        run: poetry run python -m django --version
+
+      - name: Run Django tests
+        shell: bash
+        working-directory: ./src
+        run: poetry run python manage.py test
