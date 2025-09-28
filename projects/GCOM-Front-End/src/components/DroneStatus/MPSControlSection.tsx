@@ -1,0 +1,170 @@
+import { Box, Button, Modal, Paper, TextField, Typography } from "@mui/material";
+import { useState } from "react";
+import { armDrone, getRoute, takeoffDrone } from "../../api/endpoints.ts";
+import { manualUpdateMPSQueue } from "../../store/slices/dataSlice.ts";
+
+export default function MPSControlSection() {
+    const [clientSideState, setClientSideState] = useState({
+        armed: false,
+        takeoffAltitude: 0,
+    });
+    const [modalState, setModalState] = useState(false);
+
+    return (
+        <Box
+            sx={{
+                display: "flex",
+                flexDirection: "column",
+                gap: 2,
+            }}
+        >
+            <Box>
+                {clientSideState.armed ? (
+                    <Button
+                        fullWidth
+                        variant="outlined"
+                        color="success"
+                        onClick={() => {
+                            armDrone(false).then((response) => {
+                                if (response.status === 200) {
+                                    setClientSideState((prevState) => ({
+                                        ...prevState,
+                                        armed: false,
+                                    }));
+                                }
+                            });
+                        }}
+                    >
+                        Disarm Drone
+                    </Button>
+                ) : (
+                    <Button
+                        fullWidth
+                        variant="outlined"
+                        color="error"
+                        onClick={() => {
+                            setModalState(true);
+                        }}
+                    >
+                        Arm Drone
+                    </Button>
+                )}
+            </Box>
+            <Box
+                sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "stretch",
+                    gap: 2,
+                }}
+            >
+                <TextField
+                    size="small"
+                    required
+                    id="takeoffAltitude"
+                    type="number"
+                    label="Take Off Altitude (ft)"
+                    onChange={(e) => {
+                        setClientSideState((prevState) => ({
+                            ...prevState,
+                            takeoffAltitude: parseFloat(e.target.value),
+                        }));
+                    }}
+                    value={clientSideState.takeoffAltitude === 0 ? "" : clientSideState.takeoffAltitude}
+                />
+                <Button
+                    variant="contained"
+                    color="error"
+                    onClick={() => {
+                        takeoffDrone(clientSideState.takeoffAltitude);
+                    }}
+                >
+                    Takeoff
+                </Button>
+            </Box>
+            <Box
+                sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 1,
+                }}
+            >
+                <Button variant="outlined" onClick={() => {}}>
+                    Show All Waypoints
+                </Button>
+                <Button variant="outlined" onClick={() => {}}>
+                    Hide All Waypoints
+                </Button>
+                <Box
+                    sx={{
+                        display: "flex",
+                        gap: 2,
+                        alignItems: "center",
+                    }}
+                >
+                    <Button
+                        sx={{
+                            flexGrow: 1,
+                        }}
+                        variant="outlined"
+                        color="success"
+                        onClick={() => {
+                            getRoute().then((response) => {
+                                manualUpdateMPSQueue(response);
+                            });
+                        }}
+                    >
+                        Fetch MPS Data
+                    </Button>
+                    {/* <Box
+                        sx={{
+                            display: "flex",
+                            alignItems: "center",
+                        }}
+                    >
+                        Auto Fetch
+                        <Switch
+                            onClick={() => {
+                                // Functionality to auto fetch the mps queue on an interval, not sure if needed so commented out for now.
+                            }}
+                        />
+                    </Box> */}
+                </Box>
+            </Box>
+            <Modal open={modalState} onClose={() => setModalState(false)}>
+                <Paper
+                    elevation={2}
+                    sx={{
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-50%, -50%)",
+                        p: 4,
+                    }}
+                >
+                    <Typography variant="body1" sx={{ mb: 2, textAlign: "center" }}>
+                        Are you sure you are ready to arm?
+                    </Typography>
+                    <Button
+                        fullWidth
+                        variant="contained"
+                        color="error"
+                        onClick={() => {
+                            setModalState(false);
+                            armDrone(true).then((response) => {
+                                if (response.status === 200) {
+                                    setClientSideState((prevState) => ({
+                                        ...prevState,
+                                        armed: true,
+                                    }));
+                                }
+                            });
+                        }}
+                    >
+                        Yes
+                    </Button>
+                </Paper>
+            </Modal>
+        </Box>
+    );
+}

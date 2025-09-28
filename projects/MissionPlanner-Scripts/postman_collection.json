@@ -1,0 +1,449 @@
+{
+	"info": {
+		"_postman_id": "20ebd461-c68a-4ab5-99d5-5a4b03c40827",
+		"name": "MissionPlannerScripts",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30667343"
+	},
+	"item": [
+		{
+			"name": "queue",
+			"item": [
+				{
+					"name": "queue",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "multipart/form-data"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ base_url }}/queue",
+							"host": [
+								"{{ base_url }}"
+							],
+							"path": [
+								"queue"
+							]
+						},
+						"description": "Returns the current list of queue of waypoints to hit. Passed or removed waypoints are not displayed."
+					},
+					"response": []
+				},
+				{
+					"name": "queue",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n    {\n        \"id\": 0,\n        \"name\": \"Alpha\",\n        \"latitude\": 38.3143531,\n        \"longitude\": -76.5594292,\n        \"altitude\": 100\n    },\n    {\n        \"id\": 6,\n        \"name\": \"Alpha\",\n        \"latitude\": 38.3012197,\n        \"longitude\": -76.5467262,\n        \"altitude\": 100,\n        \"command\":\"DO_CHANGE_SPEED\",\n        \"param1\":1,\n        \"param2\":10\n    },\n    {\n        \"id\": 1,\n        \"name\": \"Alpha\",\n        \"latitude\": 38.3180233,\n        \"longitude\": -76.5576053,\n        \"altitude\": 100,\n        \"command\":\"WAYPOINT\",\n        \"param1\":3,\n        \"param2\":4,\n        \"param3\":5,\n        \"param4\":6\n    },\n    {\n        \"id\": 5,\n        \"name\": \"Alpha\",\n        \"latitude\": 38.3035098,\n        \"longitude\": -76.5376282,\n        \"altitude\": 100,\n        \"command\":\"DO_VTOL_TRANSITION\",\n        \"param1\":3,\n        \"param4\":4\n    },\n    {\n        \"id\": 2,\n        \"name\": \"Alpha\",\n        \"latitude\": 38.3200772,\n        \"longitude\": -76.5527773,\n        \"altitude\": 100,\n        \"command\":\"LOITER_UNLIM\",\n        \"param3\":0\n    },\n    {\n        \"id\": 3,\n        \"name\": \"Alpha\",\n        \"latitude\": 38.3195385,\n        \"longitude\": -76.5394735,\n        \"altitude\": 100\n    },\n    {\n        \"id\": 4,\n        \"name\": \"Alpha\",\n        \"latitude\": 38.3112889,\n        \"longitude\": -76.5240669,\n        \"altitude\": 100,\n        \"param3\":-1\n    }\n    \n]"
+						},
+						"url": {
+							"raw": "{{ base_url }}/queue",
+							"host": [
+								"{{ base_url }}"
+							],
+							"path": [
+								"queue"
+							]
+						},
+						"description": "Overwrite the queue with a new list of waypoints."
+					},
+					"response": []
+				},
+				{
+					"name": "insert",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[{\r\n    \"id\": 0,\r\n    \"name\": \"Inserted\",\r\n    \"latitude\": 38.3096384,\r\n    \"longitude\": -76.5514048,\r\n    \"altitude\": 100\r\n}]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ base_url }}/insert",
+							"host": [
+								"{{ base_url }}"
+							],
+							"path": [
+								"insert"
+							]
+						},
+						"description": "Insert a waypoint onto the front of the queue."
+					},
+					"response": []
+				},
+				{
+					"name": "clear",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{ base_url }}/clear",
+							"host": [
+								"{{ base_url }}"
+							],
+							"path": [
+								"clear"
+							]
+						},
+						"description": "Clear the waypoint queue."
+					},
+					"response": []
+				},
+				{
+					"name": "diversion",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"exclude\": [\n    {\n      \"id\": 0,\n      \"name\": \"string\",\n      \"longitude\": 0,\n      \"latitude\": 0,\n      \"altitude\": 0\n    }\n  ],\n  \"rejoin_at\": {\n    \"id\": 0,\n    \"name\": \"string\",\n    \"longitude\": 0,\n    \"latitude\": 0,\n    \"altitude\": 0\n  }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ base_url }}/diversion",
+							"host": [
+								"{{ base_url }}"
+							],
+							"path": [
+								"diversion"
+							]
+						},
+						"description": "Divert the aircraft around an exclusion zone."
+					},
+					"response": []
+				}
+			],
+			"description": "Access to aircraft waypoint queue"
+		},
+		{
+			"name": "status",
+			"item": [
+				{
+					"name": "status",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"airspeed\": 0,\n  \"groundspeed\": 0,\n  \"latitude\": 0,\n  \"longitude\": 0,\n  \"altitude\": 0,\n  \"heading\": 0,\n  \"batteryvoltage\": 0,\n  \"winddirection\": 0,\n  \"windvelocity\": 0,\n  \"current_wpn\": 0,\n  \"date\": 0,\n  \"time\": 0\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ base_url }}/status",
+							"host": [
+								"{{ base_url }}"
+							],
+							"path": [
+								"status"
+							]
+						},
+						"description": "Obtain the aircraft status."
+					},
+					"response": []
+				}
+			],
+			"description": "Access to aircraft status."
+		},
+		{
+			"name": "takeoff",
+			"item": [
+				{
+					"name": "takeoff",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"altitude\": 25\n}"
+						},
+						"url": {
+							"raw": "{{ base_url }}/takeoff",
+							"host": [
+								"{{ base_url }}"
+							],
+							"path": [
+								"takeoff"
+							]
+						},
+						"description": "Lift off to a given altitude."
+					},
+					"response": []
+				},
+				{
+					"name": "arm",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"arm\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ base_url }}/arm",
+							"host": [
+								"{{ base_url }}"
+							],
+							"path": [
+								"arm"
+							]
+						},
+						"description": "Arm or disarm the motors."
+					},
+					"response": []
+				}
+			],
+			"description": "Access to takeoff and arming motors."
+		},
+		{
+			"name": "landing",
+			"item": [
+				{
+					"name": "rtl",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ base_url }}/rtl",
+							"host": [
+								"{{ base_url }}"
+							],
+							"path": [
+								"rtl"
+							]
+						},
+						"description": "Return to launch."
+					},
+					"response": []
+				},
+				{
+					"name": "rtl",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"altitude\": 0\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ base_url }}/rtl",
+							"host": [
+								"{{ base_url }}"
+							],
+							"path": [
+								"rtl"
+							]
+						},
+						"description": "Return to launch at specified altitude."
+					},
+					"response": []
+				},
+				{
+					"name": "land",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ base_url }}/land",
+							"host": [
+								"{{ base_url }}"
+							],
+							"path": [
+								"land"
+							]
+						},
+						"description": "Immediately descend and land."
+					},
+					"response": []
+				},
+				{
+					"name": "land",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\t\"id\": 0,\r\n\t\t\"name\": \"string\",\r\n\t\t\"latitude\": 38.3171058,\r\n\t\t\"longitude\": -76.5517151,\r\n\t\t\"altitude\": 100\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ base_url }}/land",
+							"host": [
+								"{{ base_url }}"
+							],
+							"path": [
+								"land"
+							]
+						},
+						"description": "Land at designated location."
+					},
+					"response": []
+				},
+				{
+					"name": "home",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": 0,\n  \"name\": \"Alpha\",\n  \"latitude\": -35.3627798,\n  \"longitude\": 149.1651830,\n  \"altitude\": 583\n}"
+						},
+						"url": {
+							"raw": "{{ base_url }}/home",
+							"host": [
+								"{{ base_url }}"
+							],
+							"path": [
+								"home"
+							]
+						},
+						"description": "Set the home waypoint of the drone."
+					},
+					"response": []
+				}
+			],
+			"description": "Access to landing, RTL, and home waypoint."
+		},
+		{
+			"name": "options",
+			"item": [
+				{
+					"name": "flightmode",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"mode\": \"loiter\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ base_url }}/flightmode",
+							"host": [
+								"{{ base_url }}"
+							],
+							"path": [
+								"flightmode"
+							]
+						},
+						"description": "Change flight mode ofm the aircraft to Loiter, Stabilize, Auto or Guided."
+					},
+					"response": []
+				},
+				{
+					"name": "altstandard",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{ base_url }}/altstandard",
+							"host": [
+								"{{ base_url }}"
+							],
+							"path": [
+								"altstandard"
+							]
+						},
+						"description": "UNIMPLEMENTED"
+					},
+					"response": []
+				}
+			],
+			"description": "Access to flight options."
+		},
+		{
+			"name": "Test Endpoint",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{ base_url }}/",
+					"host": [
+						"{{ base_url }}"
+					],
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

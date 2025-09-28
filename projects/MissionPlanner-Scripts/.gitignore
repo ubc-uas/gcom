@@ -1,0 +1,10 @@
+__pycache__
+*.pyc
+venv
+src.egg-info
+src/fence_test.py
+poetry.lock
+diversion_tests/
+node_modules/
+package-lock.json
+generated.txt
