@@ -1,5 +1,15 @@
 # MissionPlanner Scripts
 
+## Overview
+
+This project provides a HTTP server that interfaces with drone autopilot systems using the MAVLink protocol. It acts as a bridge between drones/SITL (Software In The Loop) simulation and the GCOM web-backend, enabling automated mission planning and execution for UAS (Unmanned Aerial Systems). The web-backend uses this API to control drones and receive telemetry data.
+
+**Key Components:**
+
+- **SITL (Software In The Loop)**: A simulation environment that runs autopilot firmware virtually, allowing you to test drone behavior without physical hardware
+- **Updated System**: The current cross-platform implementation using pymavlink for direct MAVLink communication - operates independently without requiring Mission Planner desktop application
+- **Legacy System**: The older Windows-only implementation that requires Mission Planner's built-in scripting interface
+
 ## Table of Contents
 
 1. [Instructions](#instructions)
@@ -9,34 +19,38 @@
 
 ## Instructions
 
+The current system uses pymavlink to communicate directly with autopilot systems via the MAVLink protocol. This approach works cross-platform and operates completely independently - Mission Planner desktop application is only needed for optional visualization and monitoring.
+
 ### SITL
 
-1. In order to run SITL on your local machine, you will need to have Docker installed. For installation instructions, refer to the
-following:
+1.  In order to run SITL on your local machine, you will need to have Docker installed. For installation instructions, refer to the
+    following:
 
-    - [Windows Installation](https://docs.docker.com/desktop/install/windows-install/)
-    - [MacOS Installation](https://docs.docker.com/desktop/install/mac-install/)
+        - [Windows Installation](https://docs.docker.com/desktop/install/windows-install/)
+        - [MacOS Installation](https://docs.docker.com/desktop/install/mac-install/)
 
-2. You will also need to have MissionPlanner installed on your system. Refer to installation steps [here](https://ardupilot.org/planner/docs/mission-planner-installation.html).
+2.  Optionally, you can install Mission Planner for flight visualization and monitoring. Refer to installation steps [here](https://ardupilot.org/planner/docs/mission-planner-installation.html). Note: This is not required for the system to function.
 
-3. Once you have Docker, you will need to pull the [SITL image from DockerHub](https://hub.docker.com/r/ubcuas/uasitl/tags). To do this, run the Docker application then run the following command (where `X.X.X` is the desired ArduPilot version - this should match what is/will be running on the drone):
+3.  Once you have Docker, you will need to pull the [SITL image from DockerHub](https://hub.docker.com/r/ubcuas/uasitl/tags). To do this, run the Docker application then run the following command (where `X.X.X` is the desired ArduPilot version - this should match what is/will be running on the drone):
 
     - ArduPlane (VTOL):
-        - x86: `docker pull ubcuas/uasitl:plane-X.X.X`
-        - ARM64: `docker pull ubcuas/uasitl:plane-arm-X.X.X`
+      - x86: `docker pull ubcuas/uasitl:plane-X.X.X`
+      - ARM64: `docker pull ubcuas/uasitl:plane-arm-X.X.X`
     - ArduCopter (Quadcopter):
-        - x86: `docker pull ubcuas/uasitl:copter-X.X.X`
-        - ARM64: `docker pull ubcuas/uasitl:copter-arm-X.X.X`
+      - x86: `docker pull ubcuas/uasitl:copter-X.X.X`
+      - ARM64: `docker pull ubcuas/uasitl:copter-arm-X.X.X`
 
     If everything goes correctly, running `docker image ls` should contain an entry for `ubcuas/uasitl`.
 
-4. Run one of the following commands to get SITL running. Refer to [the documentation](https://github.com/ubcuas/UASITL) for more customization:
+4.  Run one of the following commands to get SITL running. Refer to [the documentation](https://github.com/ubcuas/UASITL) for more customization:
 
     x86: `docker run --rm -d -p 5760:5760 --name acom-sitl ubcuas/uasitl:[plane/copter]-X.X.X`
 
     ARM64: `docker run --rm -d -p 5760:5760 --name acom-sitl ubcuas/uasitl:[plane/copter]-arm-X.X.X`
 
 ### Mavproxy
+
+Mavproxy is a command-line ground station software that acts as a communication proxy between SITL and other applications. It forwards MAVLink messages from the simulated drone to multiple outputs, allowing both Mission Planner (for visualization) and this project (for programmatic control) to connect simultaneously.
 
 Refer to [Mavproxy documentation](https://ardupilot.org/mavproxy/docs/getting_started/download_and_installation.html#updating) for installation instruction (Installing via pip is recommended for Linux systems. Windows installations must use the installer.).
 
@@ -66,63 +80,65 @@ When running mavproxy, point master to the SITL instance connection and specify 
 
 1. Install required dependencies:
 
-    ```c
-    poetry install --no-root
-    ```
+   ```c
+   poetry install --no-root
+   ```
 
 2. Launch the application:
 
-    ```c
-    poetry run python src/main.py
-    ```
+   ```c
+   poetry run python src/main.py
+   ```
 
-    The server will listen on the specified port (default 9000) for HTTP requests.
+   The server will listen on the specified port (default 9000) for HTTP requests.
 
-### Visualization
+### Visualization (Optional)
 
-Connect Mission Planner to one of output of mavproxy.
+Connect Mission Planner to one of the outputs of mavproxy for flight visualization and monitoring. This is not required for the system to function but provides helpful visual feedback during development and testing.
 
 ## Legacy Instructions
 
+The legacy system requires Mission Planner's built-in Python scripting interface and only works on Windows. This approach is deprecated in favor of the updated system above.
+
 ### SITL & MissionPlanner
 
-1. In order to run SITL on your local machine, you will need to have Docker installed. For installation instructions, refer to the
-following:
+1.  In order to run SITL on your local machine, you will need to have Docker installed. For installation instructions, refer to the
+    following:
 
-    - [Windows Installation](https://docs.docker.com/desktop/install/windows-install/)
-    - [MacOS Installation](https://docs.docker.com/desktop/install/mac-install/)
+        - [Windows Installation](https://docs.docker.com/desktop/install/windows-install/)
+        - [MacOS Installation](https://docs.docker.com/desktop/install/mac-install/)
 
-2. You will also need to have MissionPlanner installed on your system. Refer to installation steps [here](https://ardupilot.org/planner/docs/mission-planner-installation.html).
+2.  You will also need to have MissionPlanner installed on your system. Refer to installation steps [here](https://ardupilot.org/planner/docs/mission-planner-installation.html).
 
-3. Once you have Docker, you will need to pull the [SITL image from DockerHub](https://hub.docker.com/r/ubcuas/uasitl/tags). To do this, run the Docker application then run the following command (where `X.X.X` is the desired ArduPilot version - this should match what is/will be running on the drone):
+3.  Once you have Docker, you will need to pull the [SITL image from DockerHub](https://hub.docker.com/r/ubcuas/uasitl/tags). To do this, run the Docker application then run the following command (where `X.X.X` is the desired ArduPilot version - this should match what is/will be running on the drone):
 
     - ArduPlane (VTOL):
-        - x86: `docker pull ubcuas/uasitl:plane-X.X.X`
-        - ARM64: `docker pull ubcuas/uasitl:plane-arm-X.X.X`
+      - x86: `docker pull ubcuas/uasitl:plane-X.X.X`
+      - ARM64: `docker pull ubcuas/uasitl:plane-arm-X.X.X`
     - ArduCopter (Quadcopter):
-        - x86: `docker pull ubcuas/uasitl:copter-X.X.X`
-        - ARM64: `docker pull ubcuas/uasitl:copter-arm-X.X.X`
+      - x86: `docker pull ubcuas/uasitl:copter-X.X.X`
+      - ARM64: `docker pull ubcuas/uasitl:copter-arm-X.X.X`
 
     If everything goes correctly, running `docker image ls` should contain an entry for `ubcuas/uasitl`.
 
-4. Run one of the following commands to get SITL running. Refer to [the documentation](https://github.com/ubcuas/UASITL) for more customization:
+4.  Run one of the following commands to get SITL running. Refer to [the documentation](https://github.com/ubcuas/UASITL) for more customization:
 
     x86: `docker run --rm -d -p 5760:5760 --name acom-sitl ubcuas/uasitl:[plane/copter]-X.X.X`
 
     ARM64: `docker run --rm -d -p 5760:5760 --name acom-sitl ubcuas/uasitl:[plane/copter]-arm-X.X.X`
 
-5. Next, open MissionPlanner. The first thing you will want to do is make sure that the dropdown in the top right of the UI is configured to `TCP` as shown here:
+5.  Next, open MissionPlanner. The first thing you will want to do is make sure that the dropdown in the top right of the UI is configured to `TCP` as shown here:
 
-    <p align="center">
-        <img src="figures/tcpdropdown.png" width="60%">
-    </p>
+<p align="center">
+    <img src="figures/tcpdropdown.png" width="60%">
+</p>
 
-6. Press the `Connect` Button to the right of that pane. You will be prompted with two inputs: one for hostname, and another for the remote port you want to use. Enter the following for each:
+6.  Press the `Connect` Button to the right of that pane. You will be prompted with two inputs: one for hostname, and another for the remote port you want to use. Enter the following for each:
 
     - Hostname: `localhost`
     - Remote Port: `5760`
 
-7. If you have completed all of the above steps you should be ready to use SITL with MissionPlanner. If you see a drone show up on the map then you should be ready to go.
+7.  If you have completed all of the above steps you should be ready to use SITL with MissionPlanner. If you see a drone show up on the map then you should be ready to go.
 
 ### Using mission-planner
 
@@ -131,31 +147,31 @@ following:
 
 1. Install required dependencies:
 
-    ```c
-    poetry install --no-root
-    ```
+   ```c
+   poetry install --no-root
+   ```
 
 2. Launch the application:
 
-    On Windows (Powershell)
+   On Windows (Powershell)
 
-    ```c
-    poetry run python .\src\main.py
-    ```
+   ```c
+   poetry run python .\src\main.py
+   ```
 
-    On MacOS
+   On MacOS
 
-    ```c
-    poetry run python src/main.py
-    ```
+   ```c
+   poetry run python src/main.py
+   ```
 
-    The server will listen on the specified port (default 9000) for HTTP requests, and will use port 4000 to communicate with MissionPlanner.
+   The server will listen on the specified port (default 9000) for HTTP requests, and will use port 4000 to communicate with MissionPlanner.
 
 3. Start the client inside MissionPlanner:
 
-    Navigate to the 'Scripts' tab and select `client.py` to run, the press 'Run Scripts' to start.
+   Navigate to the 'Scripts' tab and select `client.py` to run, the press 'Run Scripts' to start.
 
-    <img src="figures/client_mps.png" width="60%">
+   <img src="figures/client_mps.png" width="60%">
 
 ### Using Tests
 
@@ -172,13 +188,13 @@ Then, enter the src directory and run the `pytest` command via Poetry:
 
 ### Command Line Arguments
 
-| Argument | Description |
-|-|-|
-| `--dev` | If present, server is started in development mode rather than production. |
-| `--port=9000` | Port on which to listen for HTTP requests. |
-| `--status-host=localhost` | Hostname for the status socket to connect to. |
-| `--status-port=1323` | Port for the status socket to connect to. |
-| `--disable-status` | If present, disables the status socket. |
+| Argument                  | Description                                                               |
+| ------------------------- | ------------------------------------------------------------------------- |
+| `--dev`                   | If present, server is started in development mode rather than production. |
+| `--port=9000`             | Port on which to listen for HTTP requests.                                |
+| `--status-host=localhost` | Hostname for the status socket to connect to.                             |
+| `--status-port=1323`      | Port for the status socket to connect to.                                 |
+| `--disable-status`        | If present, disables the status socket.                                   |
 
 ## Endpoints
 
@@ -192,14 +208,14 @@ Every 100ms, it will emit the `drone_update` event with the following informatio
 
 ```json
 {
-    "timestamp": 0,
-    "latitude": 0.0,
-    "longitude": 0.0,
-    "altitude": 0.0,
-    "vertical_velocity": 0.0,
-    "velocity": 0.0,
-    "heading": 0.0,
-    "battery_voltage": 0.0
+  "timestamp": 0,
+  "latitude": 0.0,
+  "longitude": 0.0,
+  "altitude": 0.0,
+  "vertical_velocity": 0.0,
+  "velocity": 0.0,
+  "heading": 0.0,
+  "battery_voltage": 0.0
 }
 ```
 
