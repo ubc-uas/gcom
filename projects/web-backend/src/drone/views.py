@@ -50,7 +50,7 @@ def land(request):
 @require_http_methods(["GET"])
 def get_rtl(request):
     response = DroneApiClient.get_rtl()
-    return JsonResponse(status=response.status_code)
+    return JsonResponse(response.json(), status=response.status_code)
 
 
 @csrf_exempt
