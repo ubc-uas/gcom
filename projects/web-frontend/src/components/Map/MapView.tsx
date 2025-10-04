@@ -11,6 +11,7 @@ import {
 import { selectAircraftStatus, selectMPSWaypoints } from "../../store/slices/dataSlice";
 import { useAppDispatch, useAppSelector } from "../../store/store";
 import WaypointItem from "../WaypointItem";
+import dotenv from "dotenv";
 
 export default function MapView() {
     const mpsWaypoints = useAppSelector(selectMPSWaypoints);
@@ -18,6 +19,7 @@ export default function MapView() {
     const aircraftStatus = useAppSelector(selectAircraftStatus);
     const coords = useAppSelector(selectMapCenterCoords);
     const dispatch = useAppDispatch();
+    dotenv.config({ path: "../../web-frontend.env" });
 
     useEffect(() => {
         dispatch(initializeMpsWaypointMapState(mpsWaypoints.length));
@@ -51,7 +53,7 @@ export default function MapView() {
                 }}
                 mapStyle={
                     window.navigator.onLine
-                        ? "https://api.maptiler.com/maps/basic-v2/style.json?key=ioE7W2lCif3DO9oj1YJh"
+                        ? `https://api.maptiler.com/maps/basic-v2/style.json?key=${process.env.MAPTILER_KEY}`
                         : "http://localhost:8000/api/map-tiles/osmbright"
                 }
                 doubleClickZoom={false}
